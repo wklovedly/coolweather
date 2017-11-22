@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,19 +44,17 @@ public class ChooseAreaFragment extends Fragment {
     private ListView listView;
     private ArrayAdapter<String> adapter;
     private List<String> dataList = new ArrayList<>();
-
     public static final int LEVEL_PROVINCE = 0;
     public static final int LEVEL_CITY = 1;
     public static final int LEVEL_COUNTY = 2;
     private int currentLevel;
-
     private List<Province> listProvince;
     private List<City> listCity;
     private List<County> countyList;
     private Province selectProvince;
     private City selectCity;
-
     private ProgressDialog progressDialog;
+    private RelativeLayout layoutTitle;
 
     @Nullable
     @Override
@@ -64,6 +63,7 @@ public class ChooseAreaFragment extends Fragment {
         textView = (TextView) view.findViewById(R.id.title_text);
         backButton = (Button) view.findViewById(R.id.back_button);
         listView = (ListView) view.findViewById(R.id.list_view);
+        layoutTitle = (RelativeLayout) view.findViewById(R.id.layout_title);
         adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, dataList);
         listView.setAdapter(adapter);
         return view;
