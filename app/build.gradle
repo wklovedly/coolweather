@@ -12,14 +12,31 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 //        jackOptions.enabled = true
     }
+//    productFlavors{
+//        baidu{
+//            applicationId "com.coolweather.android.baidu"
+//        }
+//        qihoo{
+//            applicationId "com.coolweather.android.qihoo"
+//        }
+//    }
 //    compileOptions{
 //        sourceCompatibility JavaVersion.VERSION_1_8
 //        targetCompatibility JavaVersion.VERSION_1_8
 //    }
+    signingConfigs{
+        config{
+            storeFile file("E:/project/wkdly.jks")
+            storePassword '871006wk'
+            keyAlias 'key0'
+            keyPassword '871006wk'
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
 }
