@@ -1,5 +1,6 @@
 package com.coolweather.android;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -74,27 +75,35 @@ public class ChooseAreaFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(currentLevel==LEVEL_PROVINCE){
+                if (currentLevel == LEVEL_PROVINCE) {
                     selectProvince = listProvince.get(position);
                     queryCities();
-                }else if(currentLevel == LEVEL_CITY){
+                } else if (currentLevel == LEVEL_CITY) {
                     selectCity = listCity.get(position);
                     queryCounties();
-                }else if(currentLevel == LEVEL_COUNTY){
+                } else if (currentLevel == LEVEL_COUNTY) {
+                    Activity activity = getActivity();
                     String weatherId = countyList.get(position).getWeatherId();
-                    Intent intent = new Intent(getActivity(),WeatherActivity.class);
-                    intent.putExtra("weatherId",weatherId);
-                    startActivity(intent);
-                    getActivity().finish();
+                    if (activity instanceof MainActivity) {
+                        Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                        intent.putExtra("weatherId", weatherId);
+                        startActivity(intent);
+                        getActivity().finish();
+                    } else if (activity instanceof WeatherActivity) {
+                        WeatherActivity weatherActivity = (WeatherActivity) activity;
+                        weatherActivity.drawLayout.closeDrawers();
+                        weatherActivity.swipeRefreshLayout.setRefreshing(true);
+                        weatherActivity.requestWeather(weatherId);
+                    }
                 }
             }
         });
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(currentLevel==LEVEL_COUNTY){
+                if (currentLevel == LEVEL_COUNTY) {
                     queryCities();
-                }else if(currentLevel==LEVEL_CITY){
+                } else if (currentLevel == LEVEL_CITY) {
                     queryProvinces();
                 }
             }
@@ -152,8 +161,8 @@ public class ChooseAreaFragment extends Fragment {
             currentLevel = LEVEL_COUNTY;
         } else {
             String address = "http://guolin.tech/api/china/" + selectProvince.getProvinceCode()
-                    +"/"+selectCity.getCityCode();
-            queryFromServer(address,"county");
+                    + "/" + selectCity.getCityCode();
+            queryFromServer(address, "county");
         }
     }
 
@@ -170,6 +179,7 @@ public class ChooseAreaFragment extends Fragment {
                     }
                 });
             }
+
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String responseText = response.body().string();
