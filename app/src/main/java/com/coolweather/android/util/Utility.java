@@ -76,19 +76,23 @@ public class Utility {
         }
         return false;
     }
+
     /**
      * 解析返回的天气字符串
+     *
      * @param response
      * @return
      */
-    public static Weather handleWeatherResponse(String response){
-        try {
-            JSONObject jsonObject = new JSONObject(response);
-            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
-            String weatherContent = jsonArray.get(0).toString();
-            return new Gson().fromJson(weatherContent,Weather.class);
-        } catch (JSONException e) {
-            e.printStackTrace();
+    public static Weather handleWeatherResponse(String response) {
+        if (!TextUtils.isEmpty(response)) {
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+                JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
+                String weatherContent = jsonArray.get(0).toString();
+                return new Gson().fromJson(weatherContent, Weather.class);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
